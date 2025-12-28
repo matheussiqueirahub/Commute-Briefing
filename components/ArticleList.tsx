@@ -12,8 +12,8 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles, onRemove }) 
     return (
       <div className="flex flex-col items-center justify-center p-8 text-slate-400 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50">
         <FileText className="w-12 h-12 mb-3 opacity-50" />
-        <p className="text-sm font-medium">No articles added yet.</p>
-        <p className="text-xs">Paste text above to get started.</p>
+        <p className="text-sm font-medium">Nenhum artigo adicionado ainda.</p>
+        <p className="text-xs">Cole o texto acima para começar.</p>
       </div>
     );
   }
@@ -45,7 +45,7 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles, onRemove }) 
           <button
             onClick={() => onRemove(article.id)}
             className="absolute top-2 right-2 p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors opacity-0 group-hover:opacity-100"
-            aria-label="Remove article"
+            aria-label="Remover artigo"
           >
             <Trash2 className="w-4 h-4" />
           </button>

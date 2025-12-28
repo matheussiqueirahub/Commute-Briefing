@@ -10,30 +10,30 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
 
 const MAX_CHARS = 5000;
 
-// Helper to parse errors into user-friendly messages
+// Helper to parse errors into user-friendly messages (Translated to PT)
 const getFriendlyErrorMessage = (error: any): string => {
   const msg = (error?.message || '').toLowerCase();
   
   if (msg.includes('api_key') || msg.includes('apikey')) {
-    return 'API Key is missing or invalid. Please check your settings.';
+    return 'Chave de API ausente ou inválida. Verifique suas configurações.';
   }
   if (msg.includes('quota') || msg.includes('429')) {
-    return 'API usage limit exceeded. Please try again later.';
+    return 'Limite de uso da API excedido. Tente novamente mais tarde.';
   }
   if (msg.includes('safety') || msg.includes('blocked') || msg.includes('harmful')) {
-    return 'Content was flagged by safety filters. Please review and edit your articles.';
+    return 'O conteúdo foi sinalizado pelos filtros de segurança. Revise seus artigos.';
   }
   if (msg.includes('network') || msg.includes('fetch') || msg.includes('connection')) {
-    return 'Network connection error. Please check your internet and try again.';
+    return 'Erro de conexão. Verifique sua internet e tente novamente.';
   }
   if (msg.includes('503') || msg.includes('overloaded') || msg.includes('service unavailable')) {
-    return 'The AI service is currently overloaded. Please wait a moment and try again.';
+    return 'O serviço de IA está sobrecarregado. Aguarde um momento e tente novamente.';
   }
   if (msg.includes('no audio data')) {
-    return 'Audio generation failed to return data. Please try again.';
+    return 'Falha ao gerar dados de áudio. Tente novamente.';
   }
   
-  return error.message || "An unexpected error occurred. Please try again.";
+  return error.message || "Ocorreu um erro inesperado. Tente novamente.";
 };
 
 function App() {
@@ -65,7 +65,7 @@ function App() {
 
     const newArticle: Article = {
       id: generateId(),
-      title: inputTitle.trim() || `Article ${articles.length + 1}`,
+      title: inputTitle.trim() || `Artigo ${articles.length + 1}`,
       content: inputText.trim(),
       timestamp: Date.now(),
     };
@@ -81,7 +81,7 @@ function App() {
 
   const handleClearAll = () => {
     if (articles.length === 0) return;
-    if (window.confirm("Are you sure you want to remove all articles?")) {
+    if (window.confirm("Tem certeza que deseja remover todos os artigos?")) {
       setArticles([]);
     }
   };
@@ -93,15 +93,14 @@ function App() {
     const currentRequestTime = Date.now();
     lastGenRequestRef.current = currentRequestTime;
 
-    // Reset previous state (except when auto-updating, we might want to keep showing old player? 
-    // No, better to show loading state to indicate activity)
+    // Reset previous state
     setSummaryText(null);
     setAudioBuffer(null);
     setGenerationState({ status: 'summarizing' });
 
     try {
       // 1. Summarize
-      const contentList = articles.map(a => `Title: ${a.title}\nContent: ${a.content}`);
+      const contentList = articles.map(a => `Título: ${a.title}\nConteúdo: ${a.content}`);
       const summary = await summarizeArticles(contentList);
       
       if (lastGenRequestRef.current !== currentRequestTime) return; // Stale
@@ -155,13 +154,13 @@ function App() {
               <Headphones className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-slate-900">Commute Briefing</h1>
-              <p className="text-xs text-slate-500 font-medium">Powered by Gemini 2.5</p>
+              <h1 className="text-xl font-bold tracking-tight text-slate-900">Briefing Diário</h1>
+              <p className="text-xs text-slate-500 font-medium">Tecnologia de Áudio Neural</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             {/* Auto-Update Toggle */}
-            <label className="flex items-center gap-2 cursor-pointer group" title="Automatically regenerate audio when content changes">
+            <label className="flex items-center gap-2 cursor-pointer group" title="Regenerar áudio automaticamente quando o conteúdo mudar">
               <div className="relative">
                 <input 
                   type="checkbox" 
@@ -185,7 +184,7 @@ function App() {
               className="text-xs font-medium bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             >
               {Object.values(TTSVoice).map(voice => (
-                <option key={voice} value={voice}>{voice} Voice</option>
+                <option key={voice} value={voice}>Voz {voice}</option>
               ))}
             </select>
           </div>
@@ -198,27 +197,27 @@ function App() {
         <section className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Radio className="w-5 h-5 text-indigo-500" />
-            Add Content
+            Adicionar Conteúdo
           </h2>
           
           <div className="space-y-3">
              <input
               type="text"
-              placeholder="Article Title (Optional)"
+              placeholder="Título do Artigo (Opcional)"
               value={inputTitle}
               onChange={(e) => setInputTitle(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400"
             />
             <div className="relative">
               <textarea
-                placeholder="Paste news article content here..."
+                placeholder="Cole o conteúdo da notícia aqui..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 maxLength={MAX_CHARS}
                 className="w-full p-4 h-32 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none placeholder:text-slate-400"
               />
               <div className={`text-xs mt-1.5 text-right font-medium transition-colors ${inputText.length >= MAX_CHARS ? 'text-red-500' : 'text-slate-400'}`}>
-                {inputText.length.toLocaleString()} / {MAX_CHARS.toLocaleString()} characters
+                {inputText.length.toLocaleString()} / {MAX_CHARS.toLocaleString()} caracteres
               </div>
             </div>
             <div className="flex justify-end">
@@ -228,7 +227,7 @@ function App() {
                 className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
               >
                 <Plus className="w-4 h-4" />
-                Add to Briefing
+                Adicionar
               </button>
             </div>
           </div>
@@ -238,7 +237,7 @@ function App() {
         <section>
           <div className="flex items-center justify-between mb-4 px-1">
             <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-              In Your Queue ({articles.length})
+              Na Sua Fila ({articles.length})
             </h2>
             {articles.length > 0 && (
               <button 
@@ -246,7 +245,7 @@ function App() {
                 className="text-xs font-medium text-slate-400 hover:text-red-600 flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-red-50 transition-all"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                Clear All
+                Limpar Tudo
               </button>
             )}
           </div>
@@ -270,12 +269,12 @@ function App() {
                 {autoGenerate ? (
                   <>
                     <Zap className="w-6 h-6 animate-pulse" />
-                    Auto-Update Active
+                    Auto-Update Ativo
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-6 h-6 fill-indigo-400" />
-                    Generate Audio Briefing
+                    Gerar Briefing de Áudio
                   </>
                 )}
               </button>
@@ -286,7 +285,7 @@ function App() {
               <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-xl flex items-start gap-3 border border-red-100 shadow-sm text-sm">
                 <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="font-semibold mb-0.5">Generation Failed</p>
+                  <p className="font-semibold mb-0.5">Falha na Geração</p>
                   <p className="opacity-90">{generationState.error}</p>
                 </div>
               </div>
@@ -303,12 +302,12 @@ function App() {
                  <div className="absolute inset-0 border-4 border-indigo-600 rounded-full border-t-transparent animate-spin"></div>
               </div>
               <h3 className="text-xl font-bold text-slate-800 mb-2">
-                {generationState.status === 'summarizing' ? 'Reading Articles...' : 'Recording Audio...'}
+                {generationState.status === 'summarizing' ? 'Lendo Artigos...' : 'Gravando Áudio...'}
               </h3>
               <p className="text-slate-500 text-sm">
                 {generationState.status === 'summarizing' 
-                  ? 'Gemini is analyzing and condensing your news.' 
-                  : 'Synthesizing your personalized speech.'}
+                  ? 'A IA está analisando e resumindo suas notícias.' 
+                  : 'Sintetizando sua fala personalizada.'}
               </p>
             </div>
           </div>
