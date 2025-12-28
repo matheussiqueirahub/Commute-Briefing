@@ -1,0 +1,5 @@
+{
+  "name": "Commute Briefing",
+  "description": "Generate a personalized audio news summary for your daily commute using Gemini 2.5 TTS.",
+  "requestFramePermissions": []
+}
